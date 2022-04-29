@@ -1,7 +1,12 @@
 from typing import List
+import time
 
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, Response, Request
+from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
+import aioredis
 
 from myapp import crud, models, schemas
 from myapp.database import SessionLocal, engine
@@ -9,6 +14,9 @@ from myapp.database import SessionLocal, engine
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+app.mount("/static", StaticFiles(directory="./myapp/static"), name="static")
+
+templates = Jinja2Templates(directory='./myapp/templates')
 
 # Dependency
 def get_db():
@@ -28,8 +36,10 @@ def read_user_types(db: Session = Depends(get_db)):
     return crud.list_user_types(db)
 
 @app.get("/user/", response_model=List[schemas.UserSchema])
-def read_users(db: Session = Depends(get_db)):
+async def read_users(db: Session = Depends(get_db)):
+    start = time.time()
     users = crud.list_users(db)
+    print(f"Time: {time.time() - start}")
     return users
 
 @app.get("/users/{uuid}", response_model=schemas.UserSchema)
@@ -75,3 +85,9 @@ def create_device_type(device_type: schemas.CreateDeviceTypeSchema, db: Session 
 @app.get("/device_type/", response_model=List[schemas.DeviceTypeSchema])
 def read_device_types(db: Session = Depends(get_db)):
     return crud.list_device_types(db)
+
+@app.get("/main/", response_class=HTMLResponse)
+async def main(request: Request, db: Session = Depends(get_db)):
+    devices = crud.list_devices(db)
+    device_types = crud.list_device_types(db)
+    return templates.TemplateResponse("devices.html", {"request": request, "devices":devices, "device_types":device_types})

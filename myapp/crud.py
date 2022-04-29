@@ -1,6 +1,8 @@
 import uuid
+import time
 
 from sqlalchemy.orm import Session
+import aioredis
 
 from myapp import models, schemas
 
@@ -10,8 +12,15 @@ def get_user(db: Session, uuid: str):
 def get_device(db: Session, udid: str):
     return db.query(models.Device).filter(models.Device.udid == udid).first()
 
-def list_users(db: Session):
-    return db.query(models.User).all()
+async def list_users(db: Session):
+    # redis = await aioredis.from_url("redis://localhost")
+    # users = await redis.get("users")
+    # if users:
+    #     return users
+    time.sleep(2)
+    users = db.query(models.User).all()
+    # await redis.set("users", users)
+    return users
 
 def list_devices(db: Session):
     return db.query(models.Device).all()

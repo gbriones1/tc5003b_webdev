@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <title>Pagina chida</title>
+        <link rel="icon" type="image/png" href="/static/img/ico.png">
+    </head>
+    <body>
+        <div><h1>All Devices list</h1>
+        {% for d in devices %}
+            <ul>{{ d.udid }}</ul>
+        {% endfor %}
+        </div>
+        <div><h1>All Devices types</h1>
+            {% for d in device_types %}
+                <ul>{{ d.name }}</ul>
+            {% endfor %}
+            <form method="POST" action="/device_type/">
+                <input name="name"></input>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+        <script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
+        <script src="/static/js/first.min.js"></script>
+    </body>
+</html>
