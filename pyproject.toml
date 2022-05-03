@@ -8,9 +8,7 @@ authors = ["Gabriel Briones <gabriel.briones@oracle.com>"]
 python = "^3.9"
 fastapi = "^0.75.1"
 uvicorn = {extras = ["standard"], version = "^0.17.6"}
-ibm-db-sa = "^0.3.7"
 SQLAlchemy = "1.3.23"
-ibm-db = "^3.1.1"
 aioredis = "^2.0.1"
 Jinja2 = "^3.1.2"
 

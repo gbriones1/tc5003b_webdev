@@ -106,26 +106,6 @@ python-versions = ">=3.5.0"
 test = ["Cython (>=0.29.24,<0.30.0)"]
 
 [[package]]
-name = "ibm-db"
-version = "3.1.1"
-description = "Python DBI driver for DB2 (LUW, zOS, i5) and IDS"
-category = "main"
-optional = false
-python-versions = "*"
-
-[[package]]
-name = "ibm-db-sa"
-version = "0.3.7"
-description = "SQLAlchemy support for IBM Data Servers"
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-ibm_db = ">=2.0.0"
-sqlalchemy = ">=0.7.3"
-
-[[package]]
 name = "idna"
 version = "3.3"
 description = "Internationalized Domain Names in Applications (IDNA)"
@@ -297,7 +277,7 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "c9d5ed06cac81997ac2a7e773c19e085f393e2636ee33b72503c4c2f4c188803"
+content-hash = "2f1ba1a34009c77d3253ff25fb0be8ddd6cafd0a41027e813d855ca399eb36d7"
 
 [metadata.files]
 aioredis = [
@@ -367,12 +347,6 @@ httptools = [
     {file = "httptools-0.4.0-cp39-cp39-musllinux_1_1_x86_64.whl", hash = "sha256:645373c070080e632480a3d251d892cb795be3d3a15f86975d0f1aca56fd230d"},
     {file = "httptools-0.4.0-cp39-cp39-win_amd64.whl", hash = "sha256:34d2903dd2a3dd85d33705b6fde40bf91fc44411661283763fd0746723963c83"},
     {file = "httptools-0.4.0.tar.gz", hash = "sha256:2c9a930c378b3d15d6b695fb95ebcff81a7395b4f9775c4f10a076beb0b2c1ff"},
-]
-ibm-db = [
-    {file = "ibm_db-3.1.1.tar.gz", hash = "sha256:1057140840f6c9ae0b06fc35d934ede2187b0b5489d88bce244d0ea45e38ce7a"},
-]
-ibm-db-sa = [
-    {file = "ibm_db_sa-0.3.7.tar.gz", hash = "sha256:2aa3f794abc8e702fd315cb34080107e746c9203033d507df17266cf0a3e3b65"},
 ]
 idna = [
     {file = "idna-3.3-py3-none-any.whl", hash = "sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff"},
