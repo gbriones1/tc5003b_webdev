@@ -31,6 +31,7 @@ class DeviceType(Base):
 
     utid = Column(String, primary_key=True, index=True)
     name = Column(String)
+    comment = Column(String)
     devices = relationship("Device", back_populates="device_type")
 
 class User(Base):

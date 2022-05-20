@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Union
 
 from pydantic import BaseModel
 
@@ -15,12 +15,14 @@ class CreateBrandSchema(BaseModel):
 class DeviceTypeSchema(BaseModel):
     utid: str
     name: str
+    comment: Optional[str]
 
     class Config:
         orm_mode = True
 
 class CreateDeviceTypeSchema(BaseModel):
     name: str
+    comment: str
 
 class DeviceSchema(BaseModel):
     udid: str
@@ -77,3 +79,19 @@ class UpdateUserSchema(BaseModel):
     user_type_utid: Optional[str]
     device_udids: Optional[List[str]] 
 
+
+class UserSchema(BaseModel):
+    username: str
+    email: Optional[str] = None
+    full_name: Optional[str] = None
+    disabled: Optional[bool] = None
+
+class UserInDB(UserSchema):
+    hashed_password: str
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    username: Union[str, None] = None
