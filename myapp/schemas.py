@@ -88,6 +88,7 @@ class UserSchema(BaseModel):
 
 class UserInDB(UserSchema):
     hashed_password: str
+    roles: List[str]
 
 class Token(BaseModel):
     access_token: str

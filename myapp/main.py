@@ -68,13 +68,15 @@ fake_users_db = {
         "email": "johndoe@example.com",
         "hashed_password": "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW",
         "disabled": False,
+        "roles": ["read_only", "create_resources"]
     },
     "alice": {
         "username": "alice",
         "full_name": "Alice Wonderson",
         "email": "alice@example.com",
-        "hashed_password": "fakehashedsecret2",
+        "hashed_password": "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW",
         "disabled": True,
+        "roles": ["read_only", "create_resources"]
     },
 }
 
@@ -114,6 +116,15 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     if user is None:
         raise credentials_exception
     return user
+
+class RoleChecker:
+    def __init__(self, allowed_role: str):
+        self.allowed_role = allowed_role
+
+    def __call__(self, user: schemas.UserInDB = Depends(get_current_user)):
+        if self.allowed_role not in user.roles:
+            print(f"User with roles {user.roles} does not have {self.allowed_role}")
+            raise HTTPException(status_code=403, detail="Operation not permitted")
 
 @app.get("/users/me")
 async def read_users_me(current_user: schemas.UserSchema = Depends(get_current_user)):
@@ -162,7 +173,7 @@ def read_brands(db: Session = Depends(get_db)):
     return crud.list_brands(db)
 
 @app.post("/device/", response_model=schemas.DeviceSchema)
-def create_device(device: schemas.CreateDeviceSchema, db: Session = Depends(get_db)):
+def create_device(device: schemas.CreateDeviceSchema, token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     db_device = crud.create_device(db, device)
     return db_device
 
@@ -170,7 +181,7 @@ def create_device(device: schemas.CreateDeviceSchema, db: Session = Depends(get_
 def read_devices(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
     return crud.list_devices(db)
 
-@app.post("/device_type/", response_model=schemas.DeviceTypeSchema)
+@app.post("/device_type/", response_model=schemas.DeviceTypeSchema, dependencies=[Depends(RoleChecker("create_resources"))])
 def create_device_type(device_type: schemas.CreateDeviceTypeSchema, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
     db_device_type = crud.create_device_type(db, device_type)
     return db_device_type
