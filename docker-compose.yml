@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  myapp:
+    build: .
+    ports:
+      - 8000:8000
+    networks:
+      myapp_net:
+        ipv4_address: 172.50.0.3
+
+  nginx_proxy:
+    image: nginx:latest
+    ports:
+      - 443:443
+    volumes:
+      - ./nginx_conf:/etc/nginx/conf.d/
+      - webapp_certs:/etc/ssl/
+    networks:
+      - myapp_net
+
+volumes:
+  webapp_certs:
+    external: true
+
+networks:
+  myapp_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.50.0.0/16 
